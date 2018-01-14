@@ -1,6 +1,7 @@
 
 var apiKey = 'WDY9UDH99K9I5MMI';
 var output = 'compact';
+var i;
 var stockApp = angular.module('stockApp', []);
 stockApp.controller('stockController', function($scope, $http){
 	$scope.symbol = 'AMD'
@@ -11,16 +12,20 @@ stockApp.controller('stockController', function($scope, $http){
 	
 	$http.get($scope.l).then(function(response) {
 		$scope.response = response['data']['Time Series (1min)'];
-		$scope.arr = convertInfo($scope.response);
+		i = convertInfo($scope.response);
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawChart);
 		
 	});
+	
+	
 });
 	//from google charts api
-	google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+	
 
-	function drawChart() {
-    var data = google.visualization.arrayToDataTable([
+function drawChart() {
+	//console.log(i);
+	 var data = google.visualization.arrayToDataTable([
       ['Mon', 20, 28, 38, 45],
       ['Tue', 31, 38, 55, 66],
       ['Wed', 50, 55, 77, 80],
@@ -52,16 +57,19 @@ function convertInfo(dict) {
 		keys.push(key);
 	}
 	var arr = [];
-	
 	for (key of keys) {
 		var tempDate = new Date(key);
 		var hour = tempDate.getHours() + ':' + convertMin(tempDate.getMinutes());
-		var o = key['1. open'];
-		var high = key['2. high'];
-		var low = key['3. low'];
-		var c = key['4. close'];
-		var info = [];
+		var info = dict[key];
+		
+		var o = info['1. open'];
+		var high = info['2. high'];
+		var low = info['3. low'];
+		var c = info['4. close'];
+		var tempArr = [hour, +low, +o, +c, +high];
+		arr.push(tempArr);
 	}
+	return arr;
 }
 
 function convertMin(min) {
