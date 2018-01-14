@@ -12,7 +12,9 @@ stockApp.controller('stockController', function($scope, $http){
 	$scope.symbol = 'AMD'
 	$scope.type = 'TIME_SERIES_INTRADAY';
 	$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&interval=1min&outputsize=' + output + '&apikey=' + apiKey;
-	
+	$scope.price=0.00;
+	$scope.profits = 10000;
+	$scope.original = 10000;
 	$scope.times = [];
 	/*
 	$http.get($scope.l).then(function(response) {
@@ -32,7 +34,7 @@ $(window).resize(function() {
 });
 
 function fitToContainer() {
-	$('#chartDiv').css('height', Math.floor($(window).height()* 3 / 4));
+	$('#chartDiv').css('height', Math.floor($(window).height()* 3 / 5));
 };
 
 function update() {

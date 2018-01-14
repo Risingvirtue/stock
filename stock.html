@@ -19,6 +19,8 @@
 	</head>
 	<body>
 		<div class="container-fluid" ng-controller="stockController">
+			<div class="text-center">{{symbol}}</div>
+			<div class="text-center">Current Price: {{price | currency}}</div>
 			<div class="row">
 			<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></label>
 			<div id="chartDiv" class="col-lg-8 col-md-8 col-sm-8 col-xs-8"></div>
@@ -26,25 +28,27 @@
 			<div class="row">
 				<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></label>
 				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
-					<form class="form-inline col-lg-6 col-md-6 col-sm-6 col-xs-6">
-					<div class="form-group">
-						<div>
-							<button class="btn">Buy</button>
+					<form class="form col-lg-6 col-md-6 col-sm-6 col-xs-6">
+						<div class="form-group">
+							<button class="btn buy">Buy</button>
+							<input class="buy" type="text" placeholder="Number of Shares" ng-model="profits"></input>
+							
 						</div>
-						<div>
-							<input type="text" placeholder="Number of Shares"></input>
+					</form>
+					<form class="form col-lg-6 col-md-6 col-sm-6 col-xs-6">
+						<div class="form-group">
+							<button class="btn sell">Sell</button>
+							<input class="sell" type="text" placeholder="Number of Shares"></input>
+							
 						</div>
-					</div>
+					</form>
 					
-					<div class="form-group">
-						<div>
-							<button class="btn">Sell</button>
-						</div>
-						<div>
-							<input type="text"  placeholder="Number of Shares"></input>
-						</div>
-					</div>
 				</div>
+			</div>
+			
+			<div class="text-center">
+				
+				<p ng-class="{'green': profits > original, 'red': profits < original}">{{profits | currency}} <span></span></p>
 			</div>
 		</div>
 	</body>
