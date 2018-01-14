@@ -30,26 +30,44 @@
 				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
 					<form class="form col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="form-group">
-							<button class="btn buy">Buy</button>
-							<input class="buy" type="text" placeholder="Number of Shares" ng-model="profits"></input>
+							
+							<input type="button" value="Buy"class="btn buy"></input>
+							<input class="buy" type="text" placeholder="Number of Shares" ng-model="buy"></input>
 							
 						</div>
 					</form>
-					<form class="form col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<form class="form col-lg-6 col-md-6 col-sm-6 col-xs-6" ng-submit="buyShares()">
 						<div class="form-group">
-							<button class="btn sell">Sell</button>
-							<input class="sell" type="text" placeholder="Number of Shares"></input>
-							
+							<input type="button" value="Buy"class="btn buy"></input>
+							<input class="sell" type="text" placeholder="Number of Shares" ng-model="sell"></input>
 						</div>
 					</form>
 					
-				</div>
+				</di
 			</div>
 			
 			<div class="text-center">
-				
-				<p ng-class="{'green': profits > original, 'red': profits < original}">{{profits | currency}} <span></span></p>
+				<p ng-class="{'green': profits > original, 'red': profits < original}">{{profits | currency}} 
+					<span ng-if="profits != original">
+						<span ng-if="profits > original">▲</span>
+						<span ng-if="profits < original">▼</span>
+						{{profits * 100/ original - 100| number:2}} %
+					</span></p>
 			</div>
+			
+			<table style="width:100%">
+				<tr>
+					<th>Symbol</th>
+					<th>Qty</th> 
+					<th>Fill Price</th>
+					<th>Profit</th>
+				</tr>
+				<tr>
+					<td>{{bought.symbol}}</td>
+					<td>{{bought.quantity}}</td> 
+					<td>{{bought.price}}</td>
+				</tr>	
+			</table>
 		</div>
 	</body>
 	

@@ -8,21 +8,41 @@ var index = 0;
 var min = 10000;
 var max = 0;
 var stockApp = angular.module('stockApp', []);
-stockApp.controller('stockController', function($scope, $http){
+stockApp.controller('stockController', function($scope, $http, $interval){
 	$scope.symbol = 'AMD'
 	$scope.type = 'TIME_SERIES_INTRADAY';
 	$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&interval=1min&outputsize=' + output + '&apikey=' + apiKey;
-	$scope.price=0.00;
+	$scope.price = 0;
 	$scope.profits = 10000;
 	$scope.original = 10000;
-	$scope.times = [];
-	/*
+	$scope.bought = {symbol: 'AMD', price: 10, quantity: 1000};
+	
+	$scope.buyShare = function() {
+		console.log('hello');
+	}
 	$http.get($scope.l).then(function(response) {
 		$scope.response = response['data']['Time Series (1min)'];
 		i = convertInfo($scope.response);
-		interval = setInterval(update, 1000);
+		interval = $interval(update, 1000);
+		
 	});
-	*/
+	
+	
+	
+	function update() {
+		smallInfo = i.slice(index, index + 20);
+		$scope.price = smallInfo[smallInfo.length - 1][2];
+		console.log($scope.price);
+		if (index + 20 < 100) {
+			index++;
+		} else {
+			$interval.cancel(interval);
+		}
+	
+		google.charts.load('current', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawChart);
+	}
+
 });
 
 $(document).ready(function(){
@@ -34,25 +54,12 @@ $(window).resize(function() {
 });
 
 function fitToContainer() {
-	$('#chartDiv').css('height', Math.floor($(window).height()* 3 / 5));
+	$('#chartDiv').css('height', Math.floor($(window).height()* 3 / 6));
 };
 
-function update() {
-	smallInfo = i.slice(index, index + 20);
-	console.log(smallInfo);
-	if (index + 20 < 100) {
-		index++;
-	} else {
-		clearInterval(interval);
-	}
-	
-	google.charts.load('current', {'packages':['corechart']});
-	google.charts.setOnLoadCallback(drawChart);
-}
 
 //from google charts api
 function drawChart() {
-	console.log(min, max);
 	var data = google.visualization.arrayToDataTable(smallInfo, true);
 
     var options = {
@@ -67,7 +74,7 @@ function drawChart() {
 		},
 		vAxis : {viewWindow: {min: min, max: max}, gridlines: {count: Math.floor(100* (max - min))}},
 		chartArea:{width:'85%',height:'75%'},
-		title: 'AMD',
+		
 		
     };
 
