@@ -12,13 +12,39 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 	$scope.symbol = 'AMD'
 	$scope.type = 'TIME_SERIES_INTRADAY';
 	$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&interval=1min&outputsize=' + output + '&apikey=' + apiKey;
-	$scope.price = 0;
-	$scope.profits = 10000;
+	$scope.price = 2;
+	$scope.total = 10000;
 	$scope.original = 10000;
-	$scope.bought = {symbol: 'AMD', price: 10, quantity: 1000};
+	$scope.shareTotal = 0;
+	$scope.bought = {symbol: 'AMD', price: 0, quantity: 0};
 	
 	$scope.buyShares = function() {
-		console.log('hello');
+		$scope.buy = +$scope.buy;
+		if ($scope.buy >= 0 && $scope.buy * $scope.price < $scope.total) {
+			$scope.total -= $scope.buy * $scope.price;
+			$scope.shareTotal += $scope.buy * $scope.price;
+			$scope.bought.price = changeFill($scope.bought.price, $scope.bought.quantity, 
+											$scope.price, $scope.buy);
+			$scope.bought.quantity += $scope.buy;
+			$scope.buy = "";
+		}
+	}
+	
+	$scope.sellShares = function() {
+		$scope.sell = +$scope.sell;
+		if ($scope.sell >= 0 && $scope.sell <= $scope.bought.quantity) {
+			$scope.total += $scope.sell * $scope.price;
+			$scope.shareTotal -= $scope.sell * $scope.price;
+			$scope.bought.quantity -= +$scope.sell;
+			if ($scope.bought.quantity ==0) {
+				$scope.bought.price = 0;
+			}
+			$scope.sell = "";
+		}
+	}
+	
+	function changeFill(f0, q0, f1, q1) {
+		return (f0 * q0 + f1 * q1) / (q1 + q0);
 	}
 	/*
 	$http.get($scope.l).then(function(response) {
@@ -28,6 +54,7 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 		
 	});
 	*/
+	
 	
 	
 	
@@ -75,9 +102,7 @@ function drawChart() {
 			1:{color: 'red'}
 		},
 		vAxis : {viewWindow: {min: min, max: max}, gridlines: {count: Math.floor(100* (max - min))}},
-		chartArea:{width:'85%',height:'75%'},
-		
-		
+		chartArea:{width:'85%',height:'75%'},		
     };
 
     var chart = new google.visualization.CandlestickChart(document.getElementById('chartDiv'));
