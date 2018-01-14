@@ -17,15 +17,17 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 	$scope.original = 10000;
 	$scope.bought = {symbol: 'AMD', price: 10, quantity: 1000};
 	
-	$scope.buyShare = function() {
+	$scope.buyShares = function() {
 		console.log('hello');
 	}
+	/*
 	$http.get($scope.l).then(function(response) {
 		$scope.response = response['data']['Time Series (1min)'];
 		i = convertInfo($scope.response);
 		interval = $interval(update, 1000);
 		
 	});
+	*/
 	
 	
 	
