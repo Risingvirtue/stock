@@ -34,9 +34,9 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 		$scope.sell = +$scope.sell;
 		if ($scope.sell >= 0 && $scope.sell <= $scope.bought.quantity) {
 			$scope.total += $scope.sell * $scope.price;
-			$scope.shareTotal -= $scope.sell * $scope.price;
+			$scope.shareTotal -= $scope.sell * $scope.bought.price;
 			$scope.bought.quantity -= +$scope.sell;
-			if ($scope.bought.quantity ==0) {
+			if ($scope.bought.quantity == 0) {
 				$scope.bought.price = 0;
 			}
 			$scope.sell = "";
@@ -46,14 +46,14 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 	function changeFill(f0, q0, f1, q1) {
 		return (f0 * q0 + f1 * q1) / (q1 + q0);
 	}
-	/*
+	
 	$http.get($scope.l).then(function(response) {
 		$scope.response = response['data']['Time Series (1min)'];
 		i = convertInfo($scope.response);
 		interval = $interval(update, 1000);
 		
 	});
-	*/
+	
 	
 	
 	
@@ -85,7 +85,6 @@ $(window).resize(function() {
 function fitToContainer() {
 	$('#chartDiv').css('height', Math.floor($(window).height()* 3 / 6));
 };
-
 
 //from google charts api
 function drawChart() {
