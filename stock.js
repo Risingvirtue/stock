@@ -9,14 +9,39 @@ var min = 10000;
 var max = 0;
 var stockApp = angular.module('stockApp', []);
 stockApp.controller('stockController', function($scope, $http, $interval){
-	$scope.symbol = 'AMD'
-	$scope.type = 'TIME_SERIES_INTRADAY';
+	$scope.symbols = ['AMD', 'ATHX', 'MGM', 'XNET']
+	$scope.intervals = [1, 2, 3, 5]
+
+	
+	$scope.types = ['TIME_SERIES_INTRADAY', 'TIME_SERIES_DAILY'];
 	$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&interval=1min&outputsize=' + output + '&apikey=' + apiKey;
-	$scope.price = 2;
 	$scope.total = 10000;
 	$scope.original = 10000;
 	$scope.shareTotal = 0;
 	$scope.bought = {symbol: 'AMD', price: 0, quantity: 0};
+	
+	
+	$scope.infoPressed = false;
+	
+	$scope.info = function() {
+		$scope.infoPressed = true;
+		if (typeof $scope.symbol !== 'undefined' || 
+			typeof $scope.chartInterval !== 'undefined' ||
+			typeof $scope.tickInterval !== 'undefined') {
+				console.log($scope.symbol, $scope.chartInterval, $scope.tickInterval);
+				$(".modal").css('display', 'none');
+				//daily
+				if (Math.floor($scope.chartInterval / 2) == 1) {
+					$scope.type = $scope.types[1];
+					$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&outputsize=' + output + '&apikey=' + apiKey;
+				//intraday
+				} else {
+					$scope.type = $scope.types[0];
+					$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&interval=' + $scope.chartInterval + '&outputsize=' + output + '&apikey=' + apiKey;
+				}
+			}	
+	}
+	
 	
 	$scope.buyShares = function() {
 		$scope.buy = +$scope.buy;
@@ -47,14 +72,15 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 		return (f0 * q0 + f1 * q1) / (q1 + q0);
 	}
 	
+	/*
 	$http.get($scope.l).then(function(response) {
 		$scope.response = response['data']['Time Series (1min)'];
 		i = convertInfo($scope.response);
-		interval = $interval(update, 1000);
+		interval = $interval(update, 1000 * $scope.tickInterval);
 		
 	});
 	
-	
+	*/
 	
 	
 	

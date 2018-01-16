@@ -31,12 +31,13 @@
 			
 			<div class="text-center">
 				
-				<p>Profits: <span ng-class="{'green': shareTotal + total > original, 'red': shareTotal + total < original}">{{shareTotal + total | currency}} 
-					<span ng-if="shareTotal + total != original">
-						<span ng-if="shareTotal + total > original">▲</span>
-						<span ng-if="shareTotal + total < original">▼</span>
-						{{(shareTotal + total) * 100/ original - 100| number:2}} %
-					</span>
+				<p>Profits: 
+					<span ng-class="{'green': shareTotal + total > original, 'red': shareTotal + total < original}">{{shareTotal + total | currency}} 
+						<span ng-if="shareTotal + total != original">
+							<span ng-if="shareTotal + total > original">▲</span>
+							<span ng-if="shareTotal + total < original">▼</span>
+							{{(shareTotal + total) * 100/ original - 100| number:2}} %
+						</span>
 					</span>
 				</p>
 			</div>
@@ -90,7 +91,41 @@
 				</tr>	
 			</table>
 				
-			
+			<!-- The Modal -->
+			<div id="myModal" class="modal">
+
+				<!-- Modal content -->
+				<div class="modal-content text-center">
+					<form class="row form" ng-submit="info()">
+						<div class="form-group">
+							<label>Symbol</label>
+							<select class="form-control" ng-model="symbol">
+								<option ng-repeat="s in symbols" value = "{{s}}">{{s}}</option>
+							</select>
+							<div ng-if="symbol === undefined && infoPressed" class="red">Please select a symbol.</div>
+							
+						</div>
+						<div class="form-group">
+							<label>Chart Interval</label>
+							<select class="form-control" ng-model="chartInterval">
+								<option value = 1>1 minute</option>
+								<option value = 5>5 minutes</option>
+								<option value = 2>1 day</option>
+							</select>
+							<div ng-if="chartInterval === undefined && infoPressed" class="red">Please select a symbol.</div>
+						</div>
+						<div class="form-group">
+							<label>Tick Interval</label>
+							<select class="form-control" ng-model="tickInterval">
+								<option ng-repeat="i in intervals" value = "{{i}}">{{i}} seconds</option>
+							</select>
+							<div ng-if="tickInterval === undefined && infoPressed" class="red">Please select a symbol.</div>
+						</div>
+						<input type="submit" value="Play!" class="btn"></input>
+					</form>
+				</div>
+
+			</div>
 		</div>
 	</body>
 	
