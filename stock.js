@@ -4,17 +4,19 @@ var apiKey = 'WDY9UDH99K9I5MMI';
 var output = 'compact';
 var i;
 var smallInfo;
-var index = 0;
+var index = 1;
 var min = 10000;
 var max = 0;
+var chart;
 var stockApp = angular.module('stockApp', []);
 stockApp.controller('stockController', function($scope, $http, $interval){
+	
 	$scope.symbols = ['AMD', 'ATHX', 'MGM', 'XNET']
 	$scope.intervals = [1, 2, 3, 5]
 
 	
 	$scope.types = ['TIME_SERIES_INTRADAY', 'TIME_SERIES_DAILY'];
-	$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&interval=1min&outputsize=' + output + '&apikey=' + apiKey;
+	
 	$scope.total = 10000;
 	$scope.original = 10000;
 	$scope.shareTotal = 0;
@@ -31,15 +33,19 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 				console.log($scope.symbol, $scope.chartInterval, $scope.tickInterval);
 				$(".modal").css('display', 'none');
 				//daily
-				if (Math.floor($scope.chartInterval / 2) == 1) {
+				if ($scope.chartInterval == 2) {
+					chart = 1;
 					$scope.type = $scope.types[1];
 					$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&outputsize=' + output + '&apikey=' + apiKey;
 				//intraday
 				} else {
+					chart = 0;
 					$scope.type = $scope.types[0];
-					$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&interval=' + $scope.chartInterval + '&outputsize=' + output + '&apikey=' + apiKey;
+					$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&interval=' + $scope.chartInterval + 'min&outputsize=' + output + '&apikey=' + apiKey;
 				}
-			}	
+			//after button is pressed
+			//APIRequest();
+			}
 	}
 	
 	
@@ -72,32 +78,49 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 		return (f0 * q0 + f1 * q1) / (q1 + q0);
 	}
 	
-	/*
-	$http.get($scope.l).then(function(response) {
-		$scope.response = response['data']['Time Series (1min)'];
-		i = convertInfo($scope.response);
-		interval = $interval(update, 1000 * $scope.tickInterval);
-		
-	});
+
+	function APIRequest() {
+		$http.get($scope.l).then(function(response) {
+			var timeSeries;
+			if ($scope.chartInterval == 2) {
+				timeSeries = "Time Series (Daily)";
+			} else if ($scope.chartInterval == 5) {
+				timeSeries = "Time Series (5min)"
+			} else if ($scope.chartInterval == 1) {
+				timeSeries = "Time Series (1min)"
+			}
+			$scope.resp = response['data'][timeSeries];
+			console.log(resp);
+			i = convertInfo($scope.resp);
+			interval = $interval(update, 1000 * $scope.tickInterval);
+		});
+	}
 	
-	*/
+	$scope.$watch('resp', function() {
+		if ($scope.infoPressed) {
+			
+		}
+	})
 	
 	
 	
 	function update() {
-		smallInfo = i.slice(index, index + 20);
+		if (index < 20) {
+			smallInfo = i.slice(0, index);
+		} else {
+			smallInfo = i.slice(index - 20, index);
+		}
+		//get open price
 		$scope.price = smallInfo[smallInfo.length - 1][2];
-		console.log($scope.price);
-		if (index + 20 < 100) {
+		
+		if (index < 100) {
 			index++;
 		} else {
 			$interval.cancel(interval);
 		}
-	
 		google.charts.load('current', {'packages':['corechart']});
 		google.charts.setOnLoadCallback(drawChart);
 	}
-
 });
 
 $(document).ready(function(){
@@ -110,6 +133,8 @@ $(window).resize(function() {
 
 function fitToContainer() {
 	$('#chartDiv').css('height', Math.floor($(window).height()* 3 / 6));
+	$('#loading').css('margin-top', Math.floor($(window).height()* 2 / 6));
+	
 };
 
 //from google charts api
@@ -126,12 +151,11 @@ function drawChart() {
 			0:{color: 'green'},
 			1:{color: 'red'}
 		},
-		vAxis : {viewWindow: {min: min, max: max}, gridlines: {count: Math.floor(100* (max - min))}},
+		vAxis : {viewWindow: {min: min, max: max}, gridlines: {count: 8}},
 		chartArea:{width:'85%',height:'75%'},		
     };
 
     var chart = new google.visualization.CandlestickChart(document.getElementById('chartDiv'));
-
     chart.draw(data, options);
   }
   
@@ -143,7 +167,12 @@ function convertInfo(dict) {
 	var arr = [];
 	for (key of keys) {
 		var tempDate = new Date(key);
-		var hour = tempDate.getHours() + ':' + convertMin(tempDate.getMinutes());
+		var hour;
+		if (chart == 0) {
+			hour = tempDate.getHours() + ':' + convertMin(tempDate.getMinutes());
+		} else {
+			hour = +tempDate.getMonth() + 1 + "-" + tempDate.getDate();
+		}
 		var info = dict[key];
 		var o = info['1. open'];
 		var high = info['2. high'];
@@ -174,3 +203,5 @@ function changeMinMax(minimum, maximum) {
 		max = maximum;
 	}
 }
+
+

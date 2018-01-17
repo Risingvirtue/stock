@@ -3,12 +3,12 @@
 	<head>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
 		<!-- jQuery library -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
 		<!-- Latest compiled JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		
@@ -19,8 +19,12 @@
 	</head>
 	<body>
 		<div class="container-fluid" ng-controller="stockController">
+			<div id="loading" class="text-center" style="left:50%">
+				<i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="margin-left: -50px;"></i>
+				<button id="start" class="btn" style="margin-left: -40px; margin-top: -40px; position: relative">Start!</button>
+			</div>
 			
-			<div class="text-center">{{symbol}} {{t}}</div>
+			<div class="text-center">{{symbol}}</div>
 			<div class="text-center">Current Price: {{price | currency}}</div>
 			<div class="text-center">Spending Power: {{total | currency}}</div>
 			<div class="row">
@@ -93,7 +97,6 @@
 				
 			<!-- The Modal -->
 			<div id="myModal" class="modal">
-
 				<!-- Modal content -->
 				<div class="modal-content text-center">
 					<form class="row form" ng-submit="info()">
@@ -107,7 +110,8 @@
 						</div>
 						<div class="form-group">
 							<label>Chart Interval</label>
-							<select class="form-control" ng-model="chartInterval">
+							<select class="form-control
+							" ng-model="chartInterval">
 								<option value = 1>1 minute</option>
 								<option value = 5>5 minutes</option>
 								<option value = 2>1 day</option>
@@ -124,8 +128,9 @@
 						<input type="submit" value="Play!" class="btn"></input>
 					</form>
 				</div>
-
 			</div>
+			
+			
 		</div>
 	</body>
 	

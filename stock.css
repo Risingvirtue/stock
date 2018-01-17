@@ -5,7 +5,7 @@ body {
 
 /* The Modal (background) */
 .modal {
-    display: block; /* Hidden by default */
+    display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     left: 0;
@@ -69,3 +69,16 @@ th, td {
 	text-align: center;
 }
 
+#loading {
+	margin: 0;
+	position: absolute;
+	
+}
+
+button {
+    z-index: 1;
+}
+
+canvas {
+    z-index: 0;
+}
