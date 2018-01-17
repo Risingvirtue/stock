@@ -188,7 +188,6 @@ function convertInfo(dict) {
 	return reverseArr(arr);
 }
 
-
 function reverseArr(arr) {
 	var ans = [];
 	for (var i = arr.length - 1; i>= 0; i--) {
@@ -214,5 +213,3 @@ function changeMinMax(minimum, maximum) {
 		max = maximum;
 	}
 }
-
-
