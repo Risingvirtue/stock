@@ -92,6 +92,7 @@
 					<td>{{bought.symbol}}</td>
 					<td>{{bought.quantity}}</td> 
 					<td>{{bought.price | currency}}</td>
+					<td ng-class="{'green': bought.quantity * price - shareTotal > 0, 'red': bought.quantity * price - shareTotal < 0}">{{bought.quantity * price - shareTotal | currency}}</td>
 				</tr>	
 			</table>
 				
