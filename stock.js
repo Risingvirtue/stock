@@ -26,7 +26,7 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 			typeof $scope.chartInterval !== 'undefined' ||
 			typeof $scope.tickInterval !== 'undefined') {
 				console.log($scope.symbol, $scope.chartInterval, $scope.tickInterval);
-				$scope.bought.symbol = symbol;
+				$scope.bought.symbol = $scope.symbol;
 				$(".modal").css('display', 'none');
 				//daily
 				if ($scope.chartInterval == 2) {
@@ -97,11 +97,11 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 		if ($scope.infoPressed) {
 			$(".loading").css('display', 'none');
 			$(".start").css('display', 'block');
-			startUpdate();
+			//startUpdate();
 		}
 	})
 	
-	function startUpdate() {
+	$scope.startUpdate = function() {
 		$(".start").css('display', 'none');
 		interval = $interval(update, 1000 * $scope.tickInterval);
 	}
