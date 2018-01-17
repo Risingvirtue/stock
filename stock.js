@@ -13,16 +13,11 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 	
 	$scope.symbols = ['AMD', 'ATHX', 'MGM', 'XNET']
 	$scope.intervals = [1, 2, 3, 5]
-
-	
 	$scope.types = ['TIME_SERIES_INTRADAY', 'TIME_SERIES_DAILY'];
-	
 	$scope.total = 10000;
 	$scope.original = 10000;
 	$scope.shareTotal = 0;
 	$scope.bought = {symbol: 'AMD', price: 0, quantity: 0};
-	
-	
 	$scope.infoPressed = false;
 	
 	$scope.info = function() {
@@ -31,6 +26,7 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 			typeof $scope.chartInterval !== 'undefined' ||
 			typeof $scope.tickInterval !== 'undefined') {
 				console.log($scope.symbol, $scope.chartInterval, $scope.tickInterval);
+				$scope.bought.symbol = symbol;
 				$(".modal").css('display', 'none');
 				//daily
 				if ($scope.chartInterval == 2) {
@@ -44,7 +40,7 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 					$scope.l = 'https://www.alphavantage.co/query?function=' + $scope.type + '&symbol=' + $scope.symbol + '&interval=' + $scope.chartInterval + 'min&outputsize=' + output + '&apikey=' + apiKey;
 				}
 			//after button is pressed
-			//APIRequest();
+			APIRequest();
 			}
 	}
 	
@@ -90,19 +86,25 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 				timeSeries = "Time Series (1min)"
 			}
 			$scope.resp = response['data'][timeSeries];
-			console.log(resp);
+			console.log($scope.resp);
 			i = convertInfo($scope.resp);
-			interval = $interval(update, 1000 * $scope.tickInterval);
+			
+			
 		});
 	}
 	
 	$scope.$watch('resp', function() {
 		if ($scope.infoPressed) {
-			
+			$(".loading").css('display', 'none');
+			$(".start").css('display', 'block');
+			startUpdate();
 		}
 	})
 	
-	
+	function startUpdate() {
+		$(".start").css('display', 'none');
+		interval = $interval(update, 1000 * $scope.tickInterval);
+	}
 	
 	function update() {
 		if (index < 20) {
@@ -182,9 +184,18 @@ function convertInfo(dict) {
 		arr.push(tempArr);
 		changeMinMax(+low, +high);
 	}
-	return arr;
+	
+	return reverseArr(arr);
 }
 
+
+function reverseArr(arr) {
+	var ans = [];
+	for (var i = arr.length - 1; i>= 0; i--) {
+		ans.push(arr[i]);
+	}
+	return ans;
+}
 function convertMin(min) {
 	if (min == 0) {
 		return '00';

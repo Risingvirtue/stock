@@ -20,19 +20,20 @@
 	<body>
 		<div class="container-fluid" ng-controller="stockController">
 			<div id="loading" class="text-center" style="left:50%">
-				<i class="fa fa-spinner fa-pulse fa-3x fa-fw" style="margin-left: -50px;"></i>
-				<button id="start" class="btn" style="margin-left: -40px; margin-top: -40px; position: relative">Start!</button>
+				<i class="fa fa-spinner fa-pulse fa-3x fa-fw loading"></i>
+				<form class="form" ng-submit="startUpdate()">
+					<input id="start" type="submit" value="Start!" class="btn start"></input>
+				</form>
+		
 			</div>
 			
-			<div class="text-center">{{symbol}}</div>
+			<div class="text-center"> {{symbol}} </div>
 			<div class="text-center">Current Price: {{price | currency}}</div>
 			<div class="text-center">Spending Power: {{total | currency}}</div>
 			<div class="row">
 			<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></label>
 			<div id="chartDiv" class="col-lg-8 col-md-8 col-sm-8 col-xs-8"></div>
 			</div>
-			
-			
 			<div class="text-center">
 				
 				<p>Profits: 

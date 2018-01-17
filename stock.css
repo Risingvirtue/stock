@@ -5,7 +5,7 @@ body {
 
 /* The Modal (background) */
 .modal {
-    display: none; /* Hidden by default */
+    display: block; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
     left: 0;
@@ -75,10 +75,20 @@ th, td {
 	
 }
 
-button {
+input {
     z-index: 1;
 }
 
 canvas {
     z-index: 0;
+}
+
+.start {
+	margin-left: -40px;
+	position: relative; 
+	display: none;
+}
+
+.loading {
+	margin-left: -50px;
 }
