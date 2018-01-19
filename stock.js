@@ -119,6 +119,9 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 			index++;
 		} else {
 			$interval.cancel(interval);
+			$scope.infoPressed = false;
+			$(".modal").css('display', 'block');
+			
 		}
 		google.charts.load('current', {'packages':['corechart']});
 		google.charts.setOnLoadCallback(drawChart);
