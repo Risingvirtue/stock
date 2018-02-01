@@ -5,8 +5,7 @@ var output = 'compact';
 var i;
 var smallInfo;
 var index = 1;
-var min = 10000;
-var max = 0;
+
 var chart;
 var stockApp = angular.module('stockApp', []);
 stockApp.controller('stockController', function($scope, $http, $interval){
@@ -145,7 +144,8 @@ function fitToContainer() {
 //from google charts api
 function drawChart() {
 	var data = google.visualization.arrayToDataTable(smallInfo, true);
-
+	var min = getMinMax().min;
+	var max = getMinMax().max;
     var options = {
         legend: 'none',
         candlestick: {
@@ -185,7 +185,7 @@ function convertInfo(dict) {
 		var c = info['4. close'];
 		var tempArr = [hour, +low, +o, +c, +high];
 		arr.push(tempArr);
-		changeMinMax(+low, +high);
+		//changeMinMax(+low, +high);
 	}
 	
 	return reverseArr(arr);
@@ -208,11 +208,23 @@ function convertMin(min) {
 	}
 }
 
-function changeMinMax(minimum, maximum) {
-	if (minimum < min) {
-		min = minimum;
+function getMinMax() {
+	var max = 0;
+	var min = 10000;
+	for (var i = 0; i < smallInfo.length; i++) {
+		if (max < smallInfo[i][4]) {
+			max = smallInfo[i][4];
+		}
+		
+		if (min > smallInfo[i][1]) {
+			min = smallInfo[i][1]
+		}
 	}
-	if (maximum > max) {
-		max = maximum;
+	
+	return {
+		max: max,
+		min: min
 	}
+	
+	
 }
