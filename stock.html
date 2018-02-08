@@ -111,8 +111,7 @@
 						</div>
 						<div class="form-group">
 							<label>Chart Interval</label>
-							<select class="form-control
-							" ng-model="chartInterval">
+							<select class="form-control" ng-model="chartInterval">
 								<option value = 1>1 minute</option>
 								<option value = 5>5 minutes</option>
 								<option value = 2>1 day</option>
@@ -133,10 +132,18 @@
 			
 			
 			<!-- The Modal -->
-			<div id="results" class="modal" style="display: none">
+			<div id="results" class="modal">
 				<!-- Modal content -->
 				<div class="modal-content text-center">
-					<p>Hello</p>
+					<form class="row form" ng-submit="resetStock()">
+						<p>Total Profit: </p>
+						<p ng-class="{'green': shareTotal + total > original, 'red': shareTotal + total < original}">
+								{{shareTotal + total - original | currency}}
+						</p>
+					
+						<input type="submit" value="Reset" class="btn"></input>
+					</form>
+					
 				</div>
 			</div>
 		</div>

@@ -9,15 +9,27 @@ var index = 1;
 var chart;
 var stockApp = angular.module('stockApp', []);
 stockApp.controller('stockController', function($scope, $http, $interval){
+	$scope.resetValues = function() {
+		$scope.total = 10000;
+		$scope.original = 10000;
+		$scope.shareTotal = 0;
+		$scope.bought = {symbol: 'AMD', price: 0, quantity: 0};
+		$scope.infoPressed = false;
+	}
 	
 	$scope.symbols = ['AMD', 'ATHX', 'MGM', 'XNET']
 	$scope.intervals = [1, 2, 3, 5]
 	$scope.types = ['TIME_SERIES_INTRADAY', 'TIME_SERIES_DAILY'];
-	$scope.total = 10000;
-	$scope.original = 10000;
-	$scope.shareTotal = 0;
-	$scope.bought = {symbol: 'AMD', price: 0, quantity: 0};
-	$scope.infoPressed = false;
+	
+	$scope.resetValues();
+	
+	$scope.resetStock = function() {
+		console.log('click');
+		$(".modal").css('display', 'block');
+		$("#results").css('display', 'none');
+		$scope.resetValues();
+	}
+	
 	
 	$scope.info = function() {
 		$scope.infoPressed = true;
@@ -119,7 +131,7 @@ stockApp.controller('stockController', function($scope, $http, $interval){
 		} else {
 			$interval.cancel(interval);
 			$scope.infoPressed = false;
-			$(".modal").css('display', 'block');
+			$("#results").css('display', 'block');
 			
 		}
 		google.charts.load('current', {'packages':['corechart']});
@@ -225,6 +237,4 @@ function getMinMax() {
 		max: max,
 		min: min
 	}
-	
-	
 }

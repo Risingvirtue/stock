@@ -92,3 +92,7 @@ canvas {
 .loading {
 	margin-left: -50px;
 }
+
+#results {
+	display: block;
+}
